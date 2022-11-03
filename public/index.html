@@ -9,7 +9,24 @@
 <body>
 	<h1>WebAssembly Demo</h1>
 	<script>
-      // WebAssembly
+
+		const imports = {
+			env: {
+				consoleLog: console.log
+			}
+		}
+      // Load WebAssembly
+	  WebAssembly.instantiateStreaming(fetch('./program.wasm'), imports).then(
+		wasm => {
+			// Make the WASM object accesible in window
+			window.wasm = wasm;
+
+			// log out wasm exported function
+			wasm.instance.exports.getDobule(43)
+
+			console.log(WebAssembly.Module.imports(wasm.module))
+		}
+	  ).catch(err => console.log('WASM Load error', err));
 	</script>
 </body>
 
